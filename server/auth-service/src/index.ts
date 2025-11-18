@@ -15,7 +15,7 @@ import createOtpRouter from "./routes/Otp.ts";
 
 dotenv.config({ path: "../../.env" });
 
-const PORT = parseInt(process.env.PORT || "3000", 10);
+const PORT = parseInt(process.env.AUTH_PORT as string, 10);
 
 async function startServer() {
   try {

@@ -17,6 +17,7 @@
     "escrow-wallet-service",
     "job-service",
     "presence-service",
-    "profile-service"
+    "profile-service",
+    "chat-service"
   ]
 }

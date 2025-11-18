@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import App from "./core/App.ts";
-import { connectDB } from "db-client/index.ts";
-import logger from "logs/index.ts";
+import { connectDB } from "@rizlax/db-client";
+import logger from "@rizlax/logs";
 import ContractService from "./services/Contract.ts";
 import ContractController from "./controllers/Contract.ts";
 import { createContractRouter } from "./routes/Contract.ts";
@@ -11,7 +11,7 @@ import { createMilestoneRouter } from "./routes/Milestone.ts";
 
 dotenv.config({ path: "../../.env" });
 
-const PORT = parseInt(process.env.PORT || "3003", 10);
+const PORT = parseInt(process.env.CONTRACT_PORT as string, 10);
 
 async function startServer() {
   try {

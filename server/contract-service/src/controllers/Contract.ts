@@ -1,9 +1,9 @@
 import type { Request, Response } from "express";
 import z from "zod";
-import DomainError from "common-middleware/src/DomainError.ts";
+import {DomainError} from "@rizlax/common-middleware";
 import type { Contract } from "@prisma/client"
 import type { CreateContractDTO } from "../services/Contract.ts"
-import logger from "logs/index.ts";
+import logger from "@rizlax/logs";
 
 const createContractSchema = z.object({
   clientId: z.string().uuid(),

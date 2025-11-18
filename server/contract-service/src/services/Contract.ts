@@ -1,7 +1,7 @@
-import { prisma } from "db-client/index.ts";
-import {  ContractStatus } from "@prisma/client";
-import type { Contract } from "@prisma/client"
-import DomainError from "common-middleware/src/DomainError.ts";
+import { prisma } from "@rizlax/db-client";
+import { ContractStatus } from "@prisma/client";
+import type { Contract } from "@prisma/client";
+import { DomainError } from "@rizlax/common-middleware";
 
 export interface CreateContractDTO {
   clientId: string;
@@ -125,7 +125,6 @@ class ContractService {
       data: { status: ContractStatus.TERMINATED, endDate: new Date() },
     });
   }
-
 }
 
 export default ContractService;

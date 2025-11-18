@@ -8,8 +8,8 @@ import PresenceService from "./services/presence.service.ts";
 import PresenceController from "./controllers/presence.controller.ts";
 import createPresenceRouter from "./routes/presence.routes.ts";
 
-const API_PORT = Number(process.env.PORT) || 5002;
-const SOCKET_PORT = Number(process.env.SOCKET_PORT) || 5003;
+const API_PORT = Number(process.env.PRESENCE_PORT);
+const SOCKET_PORT = Number(process.env.PRESENCE_SOCKET_PORT);
 
 async function startServers() {
   try {

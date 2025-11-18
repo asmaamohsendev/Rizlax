@@ -1,5 +1,5 @@
 {
-  "name": "presence-service",
+  "name": "chat-service",
   "packageManager": "yarn@4.9.2",
   "main": "src/index.ts",
   "type": "module",
@@ -12,26 +12,20 @@
     "test:coverage": "jest --coverage"
   },
   "devDependencies": {
-    "@types/cors": "^2.8.19",
-    "@types/express": "^5.0.3",
-    "@types/node": "^20.11.0",
-    "@types/socket.io": "^3.0.2",
+    "@types/multer": "^2.0.0",
+    "@types/node": "^24.10.0",
     "nodemon": "^3.1.10",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
   },
   "dependencies": {
+    "@rizlax/R2": "workspace:^",
     "@rizlax/common-middleware": "workspace:^",
     "@rizlax/db-client": "workspace:^",
     "@rizlax/logs": "workspace:^",
     "@rizlax/redis": "workspace:^",
-    "compression": "^1.8.1",
-    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
     "express": "^5.1.0",
-    "helmet": "^8.1.0",
-    "http": "^0.0.1-security",
-    "ioredis": "^5.8.2",
-    "socket.io": "^4.8.1",
-    "socket.io-client": "^4.8.1"
+    "socket.io": "^4.8.1"
   }
 }

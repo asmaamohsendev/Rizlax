@@ -1,6 +1,6 @@
 import { Router } from "express";
 import ContractController from "../controllers/Contract.ts";
-import { AuthGuard } from "common-middleware/src/AuthGuard.ts";
+import { AuthGuard } from "@rizlax/common-middleware";
 
 export const createContractRouter = (
   contractController: ContractController

@@ -16,7 +16,7 @@ import createProposalRouter from "./routes/Proposal.ts";
 
 dotenv.config({ path: "../../.env" });
 
-const PORT = parseInt(process.env.JOB_PORT || "3002", 10);
+const PORT = parseInt(process.env.JOB_PORT as string, 10);
 
 async function startServer() {
   try {

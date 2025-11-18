@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import App from "./core/App.ts";
-import { connectDB } from "db-client/index.ts";
-import logger from "logs/index.ts";
+import { connectDB } from "@rizlax/db-client";
+import logger from "@rizlax/logs";
 import WalletService from "./services/Wallet.ts";
 import EscrowService from "./services/Escrow.ts";
 import FinanceController from "./controllers/Finance.ts";
@@ -9,7 +9,7 @@ import { createFinanceRouter } from "./routes/Finance.ts";
 
 dotenv.config({ path: "../../.env" });
 
-const PORT = parseInt(process.env.PORT || "3004", 10);
+const PORT = parseInt(process.env.ESCROW_WALLET_PORT as string, 10);
 
 async function startServer() {
   try {
