@@ -8,7 +8,6 @@ import { onTyping } from "../events/onTyping.ts";
 import { onReadReceipt } from "../events/onReadReceipt.ts";
 import { onStopTyping } from "../events/onStopTyping.ts";
 import { onDisconnect } from "../events/onDisconnect.ts";
-import { on } from "events";
 
 interface SocketServerOptions {
   port: number;
