@@ -2,8 +2,7 @@ import { Socket } from "socket.io";
 import { WebRTCRejectCallPayload } from "../../types/webrtc.types";
 import logger from "@rizlax/logs";
 
-export class CallRejectEvent {
-  public handle(socket: Socket, payload: WebRTCRejectCallPayload): void {
+export const CallRejectEvent = async (socket: Socket, payload: WebRTCRejectCallPayload) => {
     try {
       const { callId, targetUserId, reason } = payload;
 
@@ -18,4 +17,3 @@ export class CallRejectEvent {
       logger.error("Error handling call:reject event", error);
     }
   }
-}

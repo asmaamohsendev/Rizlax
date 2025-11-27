@@ -2,8 +2,7 @@ import { Socket } from "socket.io";
 import { WebRTCCallIceCandidatePayload } from "../../types/webrtc.types";
 import logger from "@rizlax/logs";
 
-export class CallCandidateEvent {
-  public handle(socket: Socket, payload: WebRTCCallIceCandidatePayload): void {
+export const CallCandidateEvent =  async (socket: Socket, payload: WebRTCCallIceCandidatePayload) => {
     try {
       const { targetUserId, candidate } = payload;
 
@@ -19,4 +18,4 @@ export class CallCandidateEvent {
       logger.error("Error handling call:candidate event", error);
     }
   }
-}
+

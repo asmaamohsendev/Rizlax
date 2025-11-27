@@ -2,8 +2,7 @@ import { Socket } from "socket.io";
 import { WebRTCCallRingingPayload } from "../../types/webrtc.types";
 import logger from "@rizlax/logs";
 
-export class CallRingingEvent {
-  public handle(socket: Socket, payload: WebRTCCallRingingPayload): void {
+export const CallRingingEvent = async (socket: Socket, payload: WebRTCCallRingingPayload) => {
     try {
       const { callId, targetUserId } = payload;
 
@@ -15,4 +14,3 @@ export class CallRingingEvent {
       logger.error("Error handling call:ringing event", error);
     }
   }
-}

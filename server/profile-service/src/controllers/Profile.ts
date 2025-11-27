@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
 import ProfileService from "../services/Profile.ts";
-import logger from "logs/index.ts";
+import logger from "@rizlax/logs";
 
 interface AuthRequest extends Request {
   user?: {

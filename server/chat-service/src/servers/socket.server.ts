@@ -8,6 +8,7 @@ import { onTyping } from "../events/onTyping.ts";
 import { onReadReceipt } from "../events/onReadReceipt.ts";
 import { onStopTyping } from "../events/onStopTyping.ts";
 import { onDisconnect } from "../events/onDisconnect.ts";
+import { CallOfferEvent } from "../events/webRTC/call.offer.ts";
 
 interface SocketServerOptions {
   port: number;
@@ -57,6 +58,36 @@ class SocketServer {
       onReadReceipt(this.io, socket);
       onStopTyping(socket);
       onDisconnect(socket);
+
+      socket.on("call:offer", async (payload) => {
+        await CallOfferEvent(socket, payload);
+      });
+
+      socket.on("call:answer", async (payload) => {
+        socket.to(payload.targetUserId).emit("call:answer", payload);
+      });
+
+      socket.on("call:ice-candidate", async (payload) => {
+        socket.to(payload.targetUserId).emit("call:ice-candidate", payload);
+      });
+
+      socket.on("call:ringing", async (payload) => {
+        socket.to(payload.targetUserId).emit("call:ringing", payload);
+      });
+
+      socket.on("call:mute", async (payload) => {
+        socket.to(payload.targetUserId).emit("call:mute", payload);
+      });
+
+      socket.on("call:reject", async (payload) => {
+        socket.to(payload.targetUserId).emit("call:reject", payload);
+      });
+
+      socket.on("call:end", async (payload) => {
+        socket.to(payload.targetUserId).emit("call:end", payload);
+      });
+      
+
     });
   }
 

@@ -1,6 +1,6 @@
 import { Router } from "express";
 import ProfileController from "../controllers/Profile.ts";
-import { AuthGuard } from "common-middleware/src/AuthGuard.ts";
+import { AuthGuard } from "@rizlax/common-middleware";
 
 interface IProfileController {
   getFreelancerPublicProfile: typeof ProfileController.prototype.getFreelancerPublicProfile;

@@ -1,0 +1,20 @@
+{
+  "english": [
+    "instagram",
+    "insta",
+    "phone\\s*number",
+    "whatsapp",
+    "snapchat",
+    "telegram",
+    "facebook",
+    "twitter",
+    "\\d{10,}",
+    "@[\\w.]+"
+  ],
+  "arabic": [
+    "انستا",
+    "رقم\\s*تلفون",
+    "واتساب",
+    "رقمك"
+  ]
+}

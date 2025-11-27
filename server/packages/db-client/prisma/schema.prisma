@@ -9,21 +9,22 @@ datasource db {
 }
 
 model User {
-  id          String      @id @default(uuid())
-  email       String      @unique
-  password    String?
-  name        String
-  phoneNumber String      @unique
-  country     CountryCode @default(EG)
-  role        Role
-  status      UserStatus  @default(ACTIVE)
-  isVerified  Boolean     @default(false)
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-
+  id                               String                    @id @default(uuid())
+  email                            String                    @unique
+  password                         String?
+  name                             String
+  phoneNumber                      String                    @unique
+  country                          CountryCode               @default(EG)
+  role                             Role
+  status                           UserStatus                @default(ACTIVE)
+  isVerified                       Boolean                   @default(false)
+  createdAt                        DateTime                  @default(now())
+  updatedAt                        DateTime                  @updatedAt
+  suspendedUntil                   DateTime?
   // OAuth fields
   googleId                         String?                   @unique
   profilePicture                   String?
+  violations                       UserViolation[]
   authProvider                     AuthProvider              @default(EMAIL)
   Client                           Client?
   Freelancer                       Freelancer?
@@ -149,6 +150,20 @@ model Message {
   @@index([receiverId, readAt])
   @@index([senderId, timestamp])
   @@index([conversationId, receiverId, readAt])
+}
+
+model UserViolation {
+  id            String    @id @default(cuid())
+  userId        String    @map("user_id")
+  violationType String    @map("violation_type")
+  severity      String
+  content       String    @db.Text
+  expiresAt     DateTime? @map("expires_at")
+  createdAt     DateTime  @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_violations")
 }
 
 model Otp {
@@ -497,6 +512,7 @@ enum JobStatus {
   IN_PROGRESS
   COMPLETED
   CANCELED
+  SUSPENDED
 }
 
 enum ContractStatus {
@@ -578,9 +594,9 @@ model ChatAttachment {
   key            String   @unique
   fileType       String
   fileSize       Int
-  url            String 
+  url            String
   uploadedAt     DateTime @default(now())
-  metadata       Json? 
+  metadata       Json?
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 

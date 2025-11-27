@@ -1,4 +1,4 @@
-import { prisma } from "db-client/index.ts";
+import { prisma } from "@rizlax/db-client";
 import type {
   Client,
   Job,
@@ -8,7 +8,7 @@ import type {
   PortfolioLink,
   ExperienceLevel
 } from "@prisma/client";
-import logger from "logs/index.ts";
+import logger from "@rizlax/logs";
 
 export interface UpdateProfileData {
   name?: string;

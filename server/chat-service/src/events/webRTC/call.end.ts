@@ -2,8 +2,7 @@ import { Socket } from "socket.io";
 import { WebRTCCallEndPayload } from "../../types/webrtc.types";
 import logger from "@rizlax/logs";
 
-export class CallEndEvent {
-  public handle(socket: Socket, payload: WebRTCCallEndPayload): void {
+export const CallEndEvent = async (socket: Socket, payload: WebRTCCallEndPayload) => {
     try {
       const { callId, targetUserId, reason } = payload;
 
@@ -18,4 +17,3 @@ export class CallEndEvent {
       logger.error("Error handling call:end event", error);
     }
   }
-}

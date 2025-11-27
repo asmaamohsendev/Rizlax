@@ -1,6 +1,7 @@
 {
-  "name": "profile-service",
+  "name": "blog-service",
   "packageManager": "yarn@4.9.2",
+  "version": "1.0.0",
   "main": "src/index.ts",
   "type": "module",
   "scripts": {
@@ -12,6 +13,11 @@
     "test:coverage": "jest --coverage"
   },
   "dependencies": {
+    "@rizlax/R2": "workspace:^",
+    "@rizlax/common-middleware": "workspace:^",
+    "@rizlax/db-client": "workspace:^",
+    "@rizlax/logs": "workspace:^",
+    "@rizlax/redis": "workspace:^",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "express": "^5.1.0"

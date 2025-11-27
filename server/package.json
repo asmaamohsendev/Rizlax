@@ -18,6 +18,8 @@
     "job-service",
     "presence-service",
     "profile-service",
-    "chat-service"
+    "chat-service",
+    "admin-service",
+    "blog-service"
   ]
 }
