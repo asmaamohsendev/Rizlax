@@ -40,6 +40,8 @@ model User {
   jobAssets             JobAsset[]
   chatAttachments       ChatAttachment[]
   mediaFiles            MediaFile[]
+  articles              Article[]
+  notifications         Notification[]
 }
 
 enum CountryCode {
@@ -651,4 +653,121 @@ enum MediaUploadType {
   CHAT
   PROFILE
   OTHER
+}
+
+model Article {
+  id          String  @id @default(cuid())
+  title       String
+  content     String  @db.Text
+  slug        String  @unique
+  excerpt     String? @db.Text
+  coverImage  String?
+  readingTime Int?
+  isFeatured  Boolean @default(false)
+
+  published Boolean       @default(false)
+  status    ArticleStatus @default(DRAFT)
+
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  tags ArticleTag[]
+
+  views Int @default(0)
+  likes Int @default(0)
+
+  metaTitle       String?
+  metaDescription String?
+  metaKeywords    String[]
+
+  publishedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([authorId])
+  @@index([status])
+  @@index([publishedAt])
+  @@map("articles")
+}
+
+model Tag {
+  id       String       @id @default(cuid())
+  name     String       @unique
+  articles ArticleTag[]
+}
+
+model ArticleTag {
+  articleId String
+  tagId     String
+
+  article Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  tag     Tag     @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([articleId, tagId])
+  @@map("article_tags")
+}
+
+model Notification {
+  id          String             @id @default(cuid())
+  type        NotificationType
+  entity      NotificationEntity
+  entityId    String // ID of the related entity (e.g., Article ID, Message ID)
+  recipient   User?              @relation(fields: [recipientId], references: [id], onDelete: Cascade)
+  recipientId String?
+  title       String
+  message     String
+  isRead      Boolean            @default(false)
+  metadata    Json?
+  createdAt   DateTime           @default(now())
+
+  emailLogs NotificationEmailLog[]
+
+  @@index([recipientId, isRead])
+  @@index([createdAt])
+}
+
+model NotificationEmailLog {
+  id             String      @id @default(cuid())
+  notificationId String
+  email          String
+  sentAt         DateTime    @default(now())
+  status         EmailStatus @default(SENT)
+  errorMessage   String?
+
+  notification Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade)
+
+  @@index([notificationId])
+  @@index([email])
+}
+
+enum EmailStatus {
+  SENT
+  FAILED
+  QUEUED
+}
+
+enum NotificationType {
+  ADMIN
+  FREELANCER
+  CLIENT
+}
+
+enum NotificationEntity {
+  ARTICLE
+  MESSAGE
+  JOB
+  PROPOSAL
+  CONTRACT
+  DISPUTE
+  PAYMENT
+  WITHDRAWAL
+  ESCROW
+  SYSTEM
+  OTHER
+}
+
+enum ArticleStatus {
+  DRAFT
+  PUBLISHED
+  CANCELLED
 }
