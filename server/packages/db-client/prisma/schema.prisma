@@ -42,6 +42,8 @@ model User {
   mediaFiles            MediaFile[]
   articles              Article[]
   notifications         Notification[]
+  disputesRaised         Dispute[]              @relation("Dispute_RaisedBy")
+  disputeMessages       DisputeMessage[]
 }
 
 enum CountryCode {
@@ -738,6 +740,69 @@ model NotificationEmailLog {
 
   @@index([notificationId])
   @@index([email])
+}
+
+model Dispute {
+  id             String        @id @default(cuid())
+  conversationId String
+  raisedById     String
+  title          String
+  reason         String
+  details        String        @db.Text
+  status         DisputeStatus @default(OPEN)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  resolvedAt      DateTime?
+  resolvedById    String?
+  resolutionNotes String?   @db.Text
+  updatedById     String?
+
+  raiser          User             @relation("Dispute_RaisedBy", fields: [raisedById], references: [id], onDelete: Cascade)
+  disputeMessages DisputeMessage[]
+
+  @@index([conversationId])
+  @@index([status, createdAt])
+  @@map("disputes")
+}
+
+model DisputeMessage {
+  id        String   @id @default(cuid())
+  disputeId String
+  senderId  String
+  content   String   @db.Text
+  isSystem  Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  dispute            Dispute             @relation(fields: [disputeId], references: [id], onDelete: Cascade)
+  sender             User                @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  disputeAttachments DisputeAttachment[]
+
+  @@index([disputeId, createdAt])
+  @@map("dispute_messages")
+}
+
+model DisputeAttachment {
+  id               String   @id @default(cuid())
+  disputeMessageId String
+  fileName         String // R2 object key
+  originalName     String
+  fileType         String
+  fileSize         Int
+  url              String
+  uploadedAt       DateTime @default(now())
+
+  disputeMessage DisputeMessage @relation(fields: [disputeMessageId], references: [id], onDelete: Cascade)
+
+  @@index([disputeMessageId])
+  @@map("dispute_attachments")
+}
+
+enum DisputeStatus {
+  OPEN
+  UNDER_REVIEW
+  RESOLVED
+  CLOSED
 }
 
 enum EmailStatus {

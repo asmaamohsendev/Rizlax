@@ -20,6 +20,7 @@
     "profile-service",
     "chat-service",
     "admin-service",
-    "blog-service"
+    "blog-service",
+    "dispute-service"
   ]
 }

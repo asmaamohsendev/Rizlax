@@ -34,7 +34,6 @@ async function startServer() {
     await server.listen();
   } catch (error) {
     logger.error("Profile Service failed to start:", { error });
-    console.error("Profile Service failed to start:", error);
     process.exit(1);
   }
 }
