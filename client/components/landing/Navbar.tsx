@@ -1,25 +1,39 @@
-import React from 'react'
-import Link from 'next/link'
-import { Button } from '../ui/button'
-import { SelectScrollUpButton } from '../ui/select'
-
 const Navbar = () => {
   return (
-        <nav className='  absolute w-full flex justify-between py-6  items-center  bg-[#A89EF2] border-y-2 px-12 my-6 ' >    
-            <div className='text-3xl font-bold'><Link href={'/'}>Frevix</Link></div>
-            <ul className='flex gap-9 '>
-                <li><Link href={''}>الرئيسيه</Link></li>
-                <li><Link href={''}>تصفح الخدمات</Link></li>
-                <li><Link href={''}>انشر المشروع</Link></li>
-                <li><Link href={''}>اعمالي</Link></li>
-                <li><Link href={''}>عروضي</Link></li>
-            </ul>
-             <div className='flex gap-6'> 
-               <Button>انشاء حساب</Button>
-             <Button>تسجيل الدخول </Button>
-              <Button> English</Button>
-                 </div>
-        </nav>
-  )
-}
-export default Navbar
+    <nav className="top-6 w-full z-50 flex justify-center">
+      <div className="w-full max-w-7xl flex items-center justify-between px-6">
+        
+        {/* Logo */}
+        <div className="flex items-center gap-2 text-white font-bold text-xl">
+         <img src="./logo.svg" alt="" />
+        </div>
+
+        {/* Center Menu */}
+        <ul className="flex items-center gap-6 bg-[#0f1a18]/90 backdrop-blur-md rounded-full px-8 py-3 text-white">
+          <li className="bg-lime-300 text-black px-4 py-1 rounded-full">
+            Home
+          </li>
+          <li className="hover:text-lime-300 cursor-pointer">
+            How It Works
+          </li>
+          <li className="hover:text-lime-300 cursor-pointer">
+            Browse Jobs
+          </li>
+          <li className="hover:text-lime-300 cursor-pointer">
+            Find Freelancers
+          </li>
+          <li className="hover:text-lime-300 cursor-pointer">
+            Blog
+          </li>
+        </ul>
+
+        {/* Login */}
+        <button className="bg-[#0f1a18] text-lime-300 px-6 py-2 rounded-full">
+          LOG IN
+        </button>
+      </div>
+    </nav>
+  );
+};
+
+export default Navbar;
