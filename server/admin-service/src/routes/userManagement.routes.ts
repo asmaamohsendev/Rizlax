@@ -15,6 +15,7 @@ export default function createUserManagementRouter(
   UserManagementController: IUserManagementController
 ): Router {
   const router = Router();
+  
   // GET /api/admin/users (Private)
   router.get(
     "/users",
@@ -30,24 +31,24 @@ export default function createUserManagementRouter(
     UserManagementController.getUserById.bind(UserManagementController)
   );
 
-  // PUT /api/admin/users/:id/suspend (Private)
-  router.put(
+  // PATCH /api/admin/users/:id/suspend (Private)
+  router.patch(
     "/users/:id/suspend",
     AuthGuard,
     AdminOnly,
     UserManagementController.suspendUser.bind(UserManagementController)
   );
 
-  // PUT /api/admin/users/:id/ban (Private)
-  router.put(
+  // PATCH /api/admin/users/:id/ban (Private)
+  router.patch(
     "/users/:id/ban",
     AuthGuard,
     AdminOnly,
     UserManagementController.banUser.bind(UserManagementController)
   );
 
-  // PUT /api/admin/users/:id/verify (Private)
-  router.put(
+  // PATCH /api/admin/users/:id/verify (Private)
+  router.patch(
     "/users/:id/verify",
     AuthGuard,
     AdminOnly,

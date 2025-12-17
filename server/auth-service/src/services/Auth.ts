@@ -2,14 +2,14 @@ import * as argon2 from "argon2";
 import jwt from "jsonwebtoken";
 import { prisma } from "@rizlax/db-client";
 import logger from "@rizlax/logs";
-import type { User, Prisma, AuthProvider } from "@prisma/client";
+import type { User, Prisma, AuthProvider, CountryCode } from "@prisma/client";
 import ProfileService from "./Profile.ts";
 
 interface RegisterRequest {
   name: string;
   email: string;
   phoneNumber: string;
-  country: string;
+  country: CountryCode;
   password: string;
   role: string;
 }
@@ -27,7 +27,7 @@ interface OAuthNewUserParams {
   profilePicture?: string;
   authProvider: AuthProvider;
   phoneNumber?: string;
-  country?: string;
+  country?: CountryCode;
 }
 
 type UserWithoutPassword = Omit<User, "password">;
@@ -52,25 +52,31 @@ class AuthService {
       throw new Error("User not found during token generation.");
     }
 
+    const accessSecret = process.env.JWT_ACCESS_SECRET;
+    const refreshSecret = process.env.JWT_REFRESH_SECRET;
+
+    if (!accessSecret || !refreshSecret) {
+      logger.error("JWT secrets are not configured");
+      throw new Error("Server configuration error");
+    }
+
     const accessToken = jwt.sign(
       { userId: user.id, email: user.email, role: user.role },
-      process.env.JWT_ACCESS_SECRET!,
+      accessSecret,
       {
-        algorithm: "HS256",
         expiresIn: process.env.JWT_ACCESS_EXPIRES_IN || "15m",
-      }
+      } as jwt.SignOptions
     );
 
     const refreshToken = jwt.sign(
       { userId: user.id, email: user.email, role: user.role },
-      process.env.JWT_REFRESH_SECRET!,
+      refreshSecret,
       {
-        algorithm: "HS256",
         expiresIn: process.env.JWT_REFRESH_EXPIRES_IN || "7d",
-      }
+      } as jwt.SignOptions
     );
 
-    const refreshExpiresInMs = 7 * 24 * 60 * 60 * 1000; // 7 أيام
+    const refreshExpiresInMs = 7 * 24 * 60 * 60 * 1000; // 7 days
     await prisma.refreshToken.create({
       data: {
         token: refreshToken,
@@ -185,7 +191,12 @@ class AuthService {
 
   public async logout(token: string): Promise<{ message: string }> {
     try {
-      const decoded: any = jwt.verify(token, process.env.JWT_ACCESS_SECRET!);
+      const accessSecret = process.env.JWT_ACCESS_SECRET;
+      if (!accessSecret) {
+        throw new Error("Server configuration error");
+      }
+
+      const decoded: any = jwt.verify(token, accessSecret);
 
       logger.info(`Logout successful for User ID: ${decoded.userId}`);
 
@@ -226,7 +237,7 @@ class AuthService {
           authProvider,
           googleId,
           phoneNumber: phoneNumber || "N/A_OAuth",
-          country: country || "N/A_OAuth",
+          country: country || "EG",
         },
       });
 
@@ -246,9 +257,17 @@ class AuthService {
   }
 
   public async refresh(refreshToken: string): Promise<{ accessToken: string }> {
+    const refreshSecret = process.env.JWT_REFRESH_SECRET;
+    const accessSecret = process.env.JWT_ACCESS_SECRET;
+
+    if (!refreshSecret || !accessSecret) {
+      logger.error("JWT secrets are not configured");
+      throw new Error("Server configuration error");
+    }
+
     let payload: any;
     try {
-      payload = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET!);
+      payload = jwt.verify(refreshToken, refreshSecret);
     } catch (error) {
       logger.warn("Refresh token validation failed.");
       throw new Error("Invalid or expired refresh token.");
@@ -276,11 +295,10 @@ class AuthService {
 
     const newAccessToken = jwt.sign(
       { userId: user.id, email: user.email, role: user.role },
-      process.env.JWT_ACCESS_SECRET!,
+      accessSecret,
       {
-        algorithm: "HS256",
         expiresIn: process.env.JWT_ACCESS_EXPIRES_IN || "15m",
-      }
+      } as jwt.SignOptions
     );
 
     logger.info(`New access token generated for user: ${user.email}`);

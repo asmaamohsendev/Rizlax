@@ -1,17 +1,17 @@
-import { Request, Response } from "express";
-import JobContractManagementService from "../services/Job-contractManagement.service";
+import type { Request, Response } from "express";
+import JobContractManagementService from "../services/Job-contractManagement.service.ts";
 import logger from "@rizlax/logs";
 
 class JobContractManagementController {
-  private service: JobContractManagementService;
+  private jobContractManagementService: JobContractManagementService;
 
-  constructor() {
-    this.service = new JobContractManagementService();
+  constructor(jobContractManagementService: JobContractManagementService) {
+    this.jobContractManagementService = jobContractManagementService;
   }
 
   public getAllJobs = async (req: Request, res: Response): Promise<void> => {
     try {
-      const jobs = await this.service.getAllJobs();
+      const jobs = await this.jobContractManagementService.getAllJobs();
       res.status(200).json({ success: true, data: jobs });
     } catch (error) {
       logger.error(`Error in getAllJobs controller: ${error}`);
@@ -22,8 +22,8 @@ class JobContractManagementController {
   public getJobById = async (req: Request, res: Response): Promise<void> => {
     try {
       const { jobId } = req.params;
-      const job = await this.service.getJobById(jobId);
-      
+      const job = await this.jobContractManagementService.getJobById(jobId);
+
       if (!job) {
         res.status(404).json({ success: false, message: "Job not found" });
         return;
@@ -38,7 +38,7 @@ class JobContractManagementController {
 
   public getAllContracts = async (req: Request, res: Response): Promise<void> => {
     try {
-      const contracts = await this.service.getAllContracts();
+      const contracts = await this.jobContractManagementService.getAllContracts();
       res.status(200).json({ success: true, data: contracts });
     } catch (error) {
       logger.error(`Error in getAllContracts controller: ${error}`);
@@ -49,7 +49,7 @@ class JobContractManagementController {
   public getContractById = async (req: Request, res: Response): Promise<void> => {
     try {
       const { contractId } = req.params;
-      const contract = await this.service.getContractById(contractId);
+      const contract = await this.jobContractManagementService.getContractById(contractId);
       
       if (!contract) {
         res.status(404).json({ success: false, message: "Contract not found" });
@@ -66,7 +66,7 @@ class JobContractManagementController {
   public getContractsByJobId = async (req: Request, res: Response): Promise<void> => {
     try {
       const { jobId } = req.params;
-      const contracts = await this.service.getContractsByJobId(jobId);
+      const contracts = await this.jobContractManagementService.getContractsByJobId(jobId);
       res.status(200).json({ success: true, data: contracts });
     } catch (error) {
       logger.error(`Error in getContractsByJobId controller: ${error}`);
@@ -77,7 +77,7 @@ class JobContractManagementController {
   public deleteJob = async (req: Request, res: Response): Promise<void> => {
     try {
       const { jobId } = req.params;
-      await this.service.deleteJob(jobId);
+      await this.jobContractManagementService.deleteJob(jobId);
       res.status(200).json({ success: true, message: "Job deleted successfully" });
     } catch (error) {
       logger.error(`Error in deleteJob controller: ${error}`);
@@ -88,7 +88,7 @@ class JobContractManagementController {
   public deleteContract = async (req: Request, res: Response): Promise<void> => {
     try {
       const { contractId } = req.params;
-      await this.service.deleteContract(contractId);
+      await this.jobContractManagementService.deleteContract(contractId);
       res.status(200).json({ success: true, message: "Contract deleted successfully" });
     } catch (error) {
       logger.error(`Error in deleteContract controller: ${error}`);
@@ -99,7 +99,7 @@ class JobContractManagementController {
   public suspendJob = async (req: Request, res: Response): Promise<void> => {
     try {
       const { jobId } = req.params;
-      const updatedJob = await this.service.suspendJob(jobId);
+      const updatedJob = await this.jobContractManagementService.suspendJob(jobId);
       res.status(200).json({ success: true, data: updatedJob, message: "Job suspended successfully" });
     } catch (error) {
       logger.error(`Error in suspendJob controller: ${error}`);
@@ -110,7 +110,7 @@ class JobContractManagementController {
   public terminateContract = async (req: Request, res: Response): Promise<void> => {
     try {
       const { contractId } = req.params;
-      const updatedContract = await this.service.terminateContract(contractId);
+      const updatedContract = await this.jobContractManagementService.terminateContract(contractId);
       res.status(200).json({ success: true, data: updatedContract, message: "Contract terminated successfully" });
     } catch (error) {
       logger.error(`Error in terminateContract controller: ${error}`);

@@ -1,4 +1,4 @@
-import { prisma } from "db-client/index.ts";
+import { prisma } from "@rizlax/db-client";
 import { type Job, JobStatus, type Prisma } from "@prisma/client";
 import type {
   CreateJobRequest,

@@ -33,8 +33,8 @@ async function startServer() {
     const proposalRouter = createProposalRouter(proposalController); 
 
     const routers = [
-      { path: "/api/jobs", router: jobRouter },
-      { path: "/api/proposals", router: proposalRouter } // إضافة مسارات Proposals
+      { path: "/api/v1/jobs", router: jobRouter },
+      { path: "/api/v1/proposals", router: proposalRouter } // إضافة مسارات Proposals
     ];
 
     console.log("Connecting to database...");

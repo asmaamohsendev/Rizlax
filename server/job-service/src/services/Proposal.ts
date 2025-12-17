@@ -1,8 +1,8 @@
-import { prisma } from "db-client/index.ts"; 
+import { prisma } from "@rizlax/db-client"; 
 import type { Proposal as PrismaProposalModel, ProposalStatus as ProposalStatusType, Freelancer, Client, Job } from "@prisma/client"
 import { ProposalStatus } from "@prisma/client" 
 
-import logger from "logs/index.ts";
+import logger from "@rizlax/logs";
 
 import type { CreateProposalData, GetProposalsFilters, ProposalWithDetails } from "../types/Proposal.ts"; 
 

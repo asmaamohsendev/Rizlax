@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import "antd/dist/reset.css";
-import { ThemeProvider } from '@/components/providers/ThemeProvider';
 
 
 const geistSans = Geist({
@@ -16,8 +15,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Frevix Admin Panel",
-  description: "Admin control panel for Frevix freelancing platform",
+  title: "Rizlax Admin Portal",
+  description: "Admin control panel for Rizlax freelancing platform",
+  icons: {
+    icon: '/logoIcon.svg',
+  },
 };
 
 export default function RootLayout({
@@ -30,9 +32,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ThemeProvider>
           {children}
-        </ThemeProvider>
       </body>
     </html>
   );

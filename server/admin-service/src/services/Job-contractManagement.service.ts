@@ -1,10 +1,10 @@
 import { prisma } from "@rizlax/db-client";
-import { Job, Contract, JobStatus, ContractStatus } from "@prisma/client";
+import type { Job, Contract } from "@prisma/client";
+import { JobStatus, ContractStatus } from "@prisma/client";
 import logger from "@rizlax/logs";
 
 class JobContractManagementService {
-  
-    public async getAllJobs(): Promise<Job[]> {
+  public async getAllJobs(): Promise<Job[]> {
     try {
       const jobs = await prisma.job.findMany();
       return jobs;
@@ -14,7 +14,7 @@ class JobContractManagementService {
     }
   }
 
-    public async getJobById(jobId: string): Promise<Job | null> {
+  public async getJobById(jobId: string): Promise<Job | null> {
     try {
       const job = await prisma.job.findUnique({
         where: { id: jobId },
@@ -94,7 +94,7 @@ class JobContractManagementService {
       throw error;
     }
   }
-  
+
   public async terminateContract(contractId: string): Promise<Contract> {
     try {
       const updatedContract = await prisma.contract.update({

@@ -4,7 +4,10 @@ import { JobStatus } from "@prisma/client";
 export const createJobSchema = z.object({
   title: z.string().min(5, "Title must be at least 5 characters long"),
   description: z.string().min(20, "Description must be at least 20 characters long"),
-  budget: z.number().min(1, "Budget must be greater than 0"),
+  budget: z.union([
+    z.string().transform(val => parseFloat(val)),
+    z.number()
+  ]).pipe(z.number().min(1, "Budget must be greater than 0")),
   category: z.string().min(1, "Category is required"),
 });
 

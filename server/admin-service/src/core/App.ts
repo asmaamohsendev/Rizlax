@@ -8,6 +8,21 @@ interface ServiceRouter {
     router: Router;
 }
 
+const allowedOrigins = ['http://localhost:3000', 'http://localhost:3001'];
+
+const corsOptions = {
+  origin: function (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) {
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"), false);
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+};
+
 class App {
     private app: Application;
     private port: number;
@@ -22,14 +37,14 @@ class App {
     }
 
     private initializeMiddlewares(): void {
-        this.app.use(cors());
+        this.app.use(cors(corsOptions));
         this.app.use(express.json());
         this.app.use(cookieParser());
     }
 
     private initializeRoutes(): void {
         this.app.get('/', (req: Request, res: Response) => {
-            res.status(200).json({ message: 'Vync Admin service is Ready' });
+            res.status(200).json({ message: 'Rizlax Admin service is Ready' });
         });
 
         this.routers.forEach(service => {

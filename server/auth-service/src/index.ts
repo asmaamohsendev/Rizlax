@@ -36,9 +36,9 @@ async function startServer() {
     const oauthRouter = createOAuthRouter(oauthController);
 
     const routers = [
-      { path: "/api/auth", router: authRouter },
-      { path: "/api/oauth", router: oauthRouter },
-      { path: "/api/otp", router: otpRouter },
+      { path: "/api/v1/auth", router: authRouter },
+      { path: "/api/v1/oauth", router: oauthRouter },
+      { path: "/api/v1/otp", router: otpRouter },
     ];
 
     console.log("Connecting to database...");

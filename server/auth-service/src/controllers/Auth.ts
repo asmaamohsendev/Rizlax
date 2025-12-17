@@ -67,6 +67,12 @@ class AuthController {
         maxAge: 7 * 24 * 60 * 60 * 1000,
       });
 
+      res.cookie("access_token", result.accessToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        maxAge: 15 * 60 * 1000, 
+      });
+
       return res.status(200).json({
         message: "Login successful",
         user: result.user,
@@ -87,32 +93,27 @@ class AuthController {
     }
   }
 
-  public async refresh(req: Request, res: Response, next: NextFunction) {
+  public async refresh(req: Request, res: Response): Promise<Response> {
     try {
-      const refreshToken = req.cookies.refresh_token;
+      // Try to get refresh token from cookies first
+      const refreshToken = req.cookies?.refreshToken;
 
       if (!refreshToken) {
-        return res.status(401).json({ message: "Refresh token not provided" });
+        logger.warn("Refresh token missing from cookies");
+        return res.status(401).json({
+          message: "Refresh token not found. Please log in again.",
+        });
       }
 
       const result = await this.authService.refresh(refreshToken);
 
-      return res.status(200).json({
-        message: "Access token refreshed",
-        accessToken: result.accessToken,
-      });
+      logger.info("Access token refreshed successfully");
+      return res.status(200).json(result);
     } catch (error: any) {
-      if (
-        error.message.includes("Invalid") ||
-        error.message.includes("expired")
-      ) {
-        res.clearCookie("refresh_token");
-        return res
-          .status(403)
-          .json({ message: "Session expired. Please log in again." });
-      }
-      logger.error("Error during token refresh", { error: error.message });
-      next(error);
+      logger.error("Token refresh failed:", error);
+      return res.status(401).json({
+        message: error.message || "Failed to refresh access token.",
+      });
     }
   }
 

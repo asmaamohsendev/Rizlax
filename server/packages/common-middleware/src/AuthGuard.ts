@@ -4,6 +4,11 @@ import logger from "@rizlax/logs";
 
 interface AuthRequest extends Request {
   userId?: string;
+  user?: {
+    id: string;
+    email: string;
+    role: string;
+  };
 }
 
 export const AuthGuard = (
@@ -19,18 +24,28 @@ export const AuthGuard = (
       .json({ message: "Authentication token missing or malformed." });
   }
 
-    const token = authHeader.split(" ")[1];
+  const token = authHeader.split(" ")[1];
 
-      try {
+  try {
     const secret = process.env.JWT_ACCESS_SECRET;
     if (!secret) {
       logger.error("JWT_ACCESS_SECRET environment variable not set.");
       return res.status(500).json({ message: "Server configuration error." });
     }
 
-    const decoded = jwt.verify(token, secret) as { userId: string };
+    const decoded = jwt.verify(token, secret) as { 
+      userId: string; 
+      email: string; 
+      role: string; 
+    };
 
+    // Set both userId and user object for compatibility
     req.userId = decoded.userId;
+    req.user = {
+      id: decoded.userId,
+      email: decoded.email,
+      role: decoded.role,
+    };
 
     next();
   } catch (error) {
