@@ -26,7 +26,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ar" dir="rtl">
+    <html lang="en" dir="ltr">
       <body className={`${tajawal.variable} ${geistSans.variable}  antialiased`}>
         <ThemeProvider>{children}</ThemeProvider>
       </body>
