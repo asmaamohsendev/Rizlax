@@ -7,7 +7,7 @@ import HowItWorks from "@/components/landing/Howitworks";
 import WhyChoose from "@/components/landing/Whychoose";
 import Workconnect from "@/components/landing/Workconnect";
 import Testimonials from "@/components/landing/Testimonils";
-
+import BlogCards from "@/components/landing/Blogcard";
 const page = () => {
   return (
     <>
@@ -16,6 +16,7 @@ const page = () => {
       <Categories />
       <HowItWorks />
       <WhyChoose />
+      <BlogCards/>
       <Workconnect />
       <Testimonials />
       <Footer />
