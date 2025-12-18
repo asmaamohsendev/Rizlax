@@ -1,3 +1,4 @@
+import Image from "next/image";
 import {
   FaInstagram,
   FaLinkedinIn,
@@ -6,10 +7,10 @@ import {
 
 const Footer = () => {
   return (
-    <footer className="w-full flex justify-center px-4 py-10">
+    <footer className="section-container flex justify-center py-10">
       <div
         className="
-          w-full max-w-6xl
+          w-full
           rounded-[40px]
           bg-gradient-to-br
           from-[#0f1a18] via-[#0b1412] to-[#1c2d22]
@@ -18,12 +19,12 @@ const Footer = () => {
         "
       >
         {/* Logo & Description */}
-        <div className="text-center mb-10">
+        <div className="flex flex-col gap-4 mb-8">
           <div className="flex justify-center items-center gap-2 text-3xl font-bold">
-             <img src="./logo.svg" alt="logo" className="w-9xl h-9 " />
+             <Image width={400} height={107} src="./logoWhite.svg" alt="logo"/>
           </div>
 
-          <p className="text-gray-400 mt-3 max-w-xl mx-auto text-sm">
+          <p className="text-white text-center mt-3  mx-auto text-sm">
             Empowering freelancers and clients to connect, collaborate,
             and grow – all in one secure platform.
             <br />
@@ -32,13 +33,13 @@ const Footer = () => {
         </div>
 
         {/* Divider */}
-        <div className="h-px bg-green-700/40 mb-10" />
+        <div className="h-0.5 bg-primary-lime mb-10" />
 
         {/* Links */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 text-sm">
+        <div className="flex justify-between px-20 gap-10 text-sm">
           {/* Quick Links */}
           <div>
-            <h4 className="text-green-400 font-semibold mb-4">
+            <h4 className="text-primary-lime text-xl font-semibold mb-4">
               Quick Links
             </h4>
             <ul className="space-y-2 text-gray-300">
@@ -51,7 +52,7 @@ const Footer = () => {
 
           {/* Legal */}
           <div>
-            <h4 className="text-green-400 font-semibold mb-4">
+            <h4 className="text-primary-lime text-xl font-semibold mb-4">
               Legal & Policies
             </h4>
             <ul className="space-y-2 text-gray-300">
@@ -66,13 +67,13 @@ const Footer = () => {
 
           {/* Social */}
           <div>
-            <h4 className="text-green-400 font-semibold mb-4">
+            <h4 className="text-primary-lime text-xl font-semibold mb-4">
               Follow us
             </h4>
-            <div className="flex gap-4 text-lg">
-              <FaInstagram className="hover:text-green-400 cursor-pointer" />
-              <FaLinkedinIn className="hover:text-green-400 cursor-pointer" />
-              <FaFacebookF className="hover:text-green-400 cursor-pointer" />
+            <div className="flex items-center gap-6 text-lg">
+              <Image src="./instaIcon.svg" alt="Instagram" width={24} height={24} />
+              <Image src="./linkedInIcon.svg" alt="LinkedIn" width={24} height={24} />
+              <Image src="./facebookIcon.svg" alt="Facebook" width={24} height={24} />
             </div>
           </div>
         </div>

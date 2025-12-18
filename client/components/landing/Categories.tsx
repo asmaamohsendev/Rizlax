@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 
 const categoriesData = [
   {
@@ -21,29 +22,37 @@ const categoriesData = [
 
 const Categories: React.FC = () => {
   return (
-    <section className="w-full py-16 text-center">
-      <h2 className="text-3xl md:text-4xl font-extrabold text-[#2A4E45]">
-        EXPLORE <span className="text-green-500">POPULAR CATEGORIES</span>
-      </h2>
+    <section className="section-container w-full py-20 text-center">
+      <div className="flex flex-col gap-4">
+        <h2 className="text-5xl l font-extrabold bg-gradient-to-r from-[#23343D] via-[#598671] to-[#23343D] bg-clip-text text-transparent">
+          EXPLORE POPULAR CATEGORIES
+        </h2>
 
-      <p className="text-gray-600 mt-3 max-w-2xl mx-auto">
-        Find Professionals Across Every Industry — From Creative Design To Technical Development.
-      </p>
-
-      <div className="mt-12 flex flex-wrap justify-center gap-10">
+        <p className="text-[18px] text-gray-600 mt-3 mx-auto">
+          Find Professionals Across Every Industry — From Creative Design To
+          Technical Development.
+        </p>
+      </div>
+      <div className="mt-12 flex flex-wrap justify-center gap-8">
         {categoriesData.map((cat, index) => (
           <div
             key={index}
-            className="w-56 h-56 rounded-full flex flex-col items-center justify-center bg-[#0D1514] shadow-xl"
+            className="relative w-56 h-56 rounded-full flex flex-col items-center justify-center bg-[#0D1514] shadow-xl"
             style={{
               boxShadow: "0 0 60px rgba(164, 255, 125, 0.25) inset",
             }}
           >
-            <div className="w-16 h-16 mb-4">
-              <img
+            {/* layer blur */}
+            <div className="relative w-16 h-16 mb-4">
+              {/* Blur effect behind the image */}
+              <div className="absolute inset-0 -translate-y-2 scale-140 rounded-full bg-gradient-to-r via-[#598671]  opacity-100 blur-[15px]" />
+
+              <Image
                 src={cat.image}
                 alt={cat.title}
-                className="w-full h-full object-contain"
+                className="relative z-10 w-full h-full object-contain drop-shadow-lg"
+                width={48}
+                height={48}
               />
             </div>
 
@@ -54,7 +63,7 @@ const Categories: React.FC = () => {
         ))}
       </div>
 
-      <button className="mt-12 text-lg font-semibold text-gray-800 hover:text-green-600 transition">
+      <button className="mt-12 text-2xl font-semibold text-gray-800 hover:text-green-600 transition">
         SEE ALL
       </button>
     </section>
