@@ -8,7 +8,6 @@ import ProfileService from "./Profile.ts";
 interface RegisterRequest {
   name: string;
   email: string;
-  phoneNumber: string;
   country: CountryCode;
   password: string;
   role: string;
@@ -91,7 +90,6 @@ class AuthService {
   public async register({
     name,
     email,
-    phoneNumber,
     country,
     password,
     role,
@@ -117,7 +115,6 @@ class AuthService {
         data: {
           name,
           email,
-          phoneNumber,
           country,
           password: hashed,
           role: normalizedRole,

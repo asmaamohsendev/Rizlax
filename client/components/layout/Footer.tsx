@@ -1,13 +1,8 @@
 import Image from "next/image";
-import {
-  FaInstagram,
-  FaLinkedinIn,
-  FaFacebookF,
-} from "react-icons/fa";
 
 const Footer = () => {
   return (
-    <footer className="section-container flex justify-center py-10">
+    <footer className="w-[1440px] mx-auto flex justify-center py-10">
       <div
         className="
           w-full

@@ -91,7 +91,7 @@
   --muted: #e0e0e0;
   --muted-foreground: #757575;
 
-  --destructive: #dc2626;
+  --destructive: #CF1212;
   --destructive-foreground: #FFFFFF;
 
   --border: #e0e0e0;
@@ -135,7 +135,7 @@
   --muted: #23343D;
   --muted-foreground: #757575;
 
-  --destructive: #dc2626;
+  --destructive: #CF1212;
   --destructive-foreground: #FFFFFF;
 
   --border: #23343D;
@@ -194,6 +194,7 @@
 .section-container {
   max-width: 1440px;
   margin: 0 auto;
+  padding: 0 80px;
 }
 
 .gradient-primary {

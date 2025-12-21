@@ -13,7 +13,7 @@ model User {
   email                            String                    @unique
   password                         String?
   name                             String
-  phoneNumber                      String                    @unique
+  phoneNumber                      String?                   @unique
   country                          CountryCode               @default(EG)
   role                             Role
   status                           UserStatus                @default(ACTIVE)
@@ -42,7 +42,7 @@ model User {
   mediaFiles            MediaFile[]
   articles              Article[]
   notifications         Notification[]
-  disputesRaised         Dispute[]              @relation("Dispute_RaisedBy")
+  disputesRaised        Dispute[]              @relation("Dispute_RaisedBy")
   disputeMessages       DisputeMessage[]
 }
 

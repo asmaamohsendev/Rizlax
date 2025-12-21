@@ -7,21 +7,20 @@ const Hero = () => {
     <section
       className="
         section-container
-        h-[820px]  rounded-3xl py-10 md:p-16 
+        h-[820px]  rounded-3xl  md:p-16 
         bg-cover bg-center 
         text-white 
         relative
-     
       "
       style={{
-        backgroundImage: "url('./hero.jpg')", // ← ضع صورة الخلفية الخاصة بك
+        backgroundImage: "url('./hero.jpg')", 
       }}
     >
       {/* Overlay Gradient */}
       <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/10 rounded-3xl"></div>
 
       {/* Content */}
-      <div className="relative w-[963px] z-10 flex flex-col gap-16 ">
+      <div className="relative z-10 pt-24 flex flex-col gap-16 ">
         <div className="gap-2">
           <h1 className="text-7xl font-extrabold leading-normal">
             CONNECTING TOP TALENT <br />
@@ -29,14 +28,14 @@ const Hero = () => {
             BUSINESSES
           </h1>
 
-          <p className="text-2xl text-gray-300 mt-4">
+          <p className="text-2xl text-gray-300">
             Rizlax Helps Businesses Find Expert Freelancers And Empowers <br />{" "}
             Professionals To Grow Their Careers — Faster, Smarter, And With
             Trust.
           </p>
         </div>
         {/* Buttons */}
-        <div className="mt-6 flex gap-4">
+        <div className="flex gap-4">
           <PrimaryButton className="w-[303px]" size="lg">
             FIND FREELANCERS
           </PrimaryButton>
@@ -48,7 +47,7 @@ const Hero = () => {
       </div>
 
       {/* Stats Boxes */}
-      <div className="absolute bottom-10 z-10 mt-12 flex flex-col md:flex-row w-[1160px] justify-between">
+      <div className="absolute bottom-[52px] z-10 mt-12 flex flex-col md:flex-row w-[1160px] justify-between">
         <div className="bg-black/40 backdrop-blur-[30%] p-4 md:p-8 rounded-4xl flex items-center gap-3 md:gap-6 min-w-[200px] md:min-w-[280px]">
           <span className="text-3xl md:text-5xl text-green-400">✔</span>
           <div>

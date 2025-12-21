@@ -24,7 +24,6 @@ class AuthController {
       const result = await this.authService.register({
         name,
         email,
-        phoneNumber,
         country,
         password,
         role,

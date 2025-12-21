@@ -1,143 +1,208 @@
 "use client";
 
-import { handleLogin } from "@/lib/handlers/authHandlers";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useAuth } from "@/stores/useAuth";
-import { loginSchema } from "@/schemas/loginSchema";
-import z from "zod";
-
+import { useEffect, useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { OAuthButtons } from "@/components/auth/OAuthButtons";
+import { useAuth, useIsLoggedIn } from "@/stores/useAuth";
+import Link from "next/link";
+import Image from "next/image";
+import Input from "@/components/Input";
+import PrimaryButton from "@/components/PrimaryButton";
 
-type FormData = z.infer<typeof loginSchema>;
-
-const LoginPage = () => {
+export default function RegisterPage() {
   const router = useRouter();
-  const [selectedRole, setSelectedRole] = useState<'CLIENT' | 'FREELANCER' | ''>('');
+  const { login, isLoading, error, setLoading, setError, clearError } =
+    useAuth();
 
-  const { error, isLoading, clearError } = useAuth();
+  const isLoggedIn = useIsLoggedIn();
+  const _hasHydrated = useAuth((state) => state._hasHydrated);
 
-  const {
-    register: formRegister,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormData>({
-    resolver: zodResolver(loginSchema),
-  });
+  const [mounted, setMounted] = useState(false);
 
-  const onSubmit = async (data: FormData) => {
-    await handleLogin(data.email, data.password, data.role);
-    router.push("/dashboard");
-  };
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [role, setRole] = useState<string | null>(null);
 
   useEffect(() => {
-    return () => {
-      clearError();
-    };
-  }, [clearError]);
+    setMounted(true);
+
+    const storedRole = localStorage.getItem("Role");
+    if (storedRole) {
+      setRole(storedRole);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (mounted && _hasHydrated && isLoggedIn) {
+      router.push("/dashboard");
+    }
+  }, [mounted, _hasHydrated, isLoggedIn, router]);
+
+  useEffect(() => {
+    if (mounted && _hasHydrated && !role) {
+      router.push("/choose-role");
+    }
+  }, [mounted, _hasHydrated, role, router]);
+  if (!mounted) return null;
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    clearError();
+    setLoading(true);
+
+    try {
+      const response = await fetch("http://localhost:5000/api/v1/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          email,
+          password,
+          role: role,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Login failed");
+      }
+
+      login(data.user, data.accessToken);
+      router.push("/dashboard");
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "An error occurred during login"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    
-    <div className="flex justify-center items-center min-h-screen bg-background">
-      <Card className="w-full max-w-md shadow-xl p-4">
-        <CardHeader>
-          <h2 className="text-2xl font-semibold text-center">Sign In</h2>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <div>
-              <Input
-                placeholder="Email"
-                type="email"
-                {...formRegister("email")}
-              />
-              {errors.email && (
-                <p className="text-sm text-destructive mt-1">
-                  {errors.email.message}
-                </p>
-              )}
-            </div>
-            <div>
-              <Input
-                placeholder="Password"
-                type="password"
-                {...formRegister("password")}
-              />
-              {errors.password && (
-                <p className="text-sm text-destructive mt-1">
-                  {errors.password.message}
-                </p>
-              )}
-            </div>
-            {error && (
-              <p className="text-sm text-destructive font-medium text-center">
-                {error}
-              </p>
-            )}
-            <div>
-              <select
-                {...formRegister("role")}
-                onChange={(e) => {
-                  formRegister("role").onChange(e);
-                  setSelectedRole(e.target.value as 'CLIENT' | 'FREELANCER' | '');
-                }}
-                className="w-full border rounded-md px-3 py-2 text-sm bg-input text-foreground border-border focus:ring-2 focus:ring-ring"
-              >
-                <option value="">Select Role</option>
-                <option value="CLIENT">Client</option>
-                <option value="FREELANCER">Freelancer</option>
-              </select>
-              {errors.role && (
-                <p className="text-sm text-destructive mt-1">
-                  {errors.role.message}
-                </p>
-              )}
-            </div>
+    <>
+      <div className=""></div>
+      <div className="section-container  ">
+        <div className="flex gap-10">
+          {/* Left side (Form) */}
+          <div className=" bg-white flex flex-col h-[976px] ">
+            <Link href="/" className="cursor-pointer mb-12 mt-[29px]">
+              <div className="flex items-center text-white font-bold text-xl">
+                <Image src="./logo.svg" alt="" width={220} height={60} />
+              </div>
+            </Link>
+            <div className="w-full mx-auto">
+              <div className="flex flex-col text-left">
+                <div className="flex flex-col gap-2 mb-8">
+                  <h2 className="text-4xl font-bold  text-gray-800">
+                    Welcome Back
+                  </h2>
+                  <p className="text-[14px] text-gray-600">
+                    Log in to continue to your dashboard.
+                  </p>
+                </div>
 
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? "Signing in..." : "Sign In"}
-            </Button>
-          </form>
-          
-          {/* OAuth Section */}
-          <div className="mt-6">
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t" />
-              </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-background px-2 text-muted-foreground">
-                  Or continue with
-                </span>
+                <form onSubmit={handleSubmit}>
+                  <div className="flex flex-col gap-6">
+                    <div className="flex flex-col gap-4">
+                      <label className="text-[16px] font-medium block text-black ">
+                        Email Address
+                      </label>
+                      <Input
+                        type="text"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="w-[509px]"
+                        placeholder="john.doe@example.com"
+                      />
+                      {error && (
+                        <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4">
+                          <p className="text-sm text-red-400 font-light">
+                            {error}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex flex-col gap-4">
+                      <label className="text-[16px] font-medium block text-black ">
+                        Password
+                      </label>
+                      <div className="flex flex-col gap-2">
+                        <Input
+                          type="password"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          className="w-[509px]"
+                          placeholder="••••••••"
+                        />
+                        {error && (
+                          <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4">
+                            <p className="text-sm text-red-400 font-light">
+                              {error}
+                            </p>
+                          </div>
+                        )}
+                        {/* forgot password link */}
+                        <Link
+                          href="/forgot-password"
+                          className="text-primary-sage text-[13px] text-right underline"
+                        >
+                          Forgot your password?
+                        </Link>
+                      </div>
+                    </div>
+
+                    {error && (
+                      <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4">
+                        <p className="text-sm text-red-400 font-light">
+                          {error}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                  <div className="relative w-[509px] pt-16">
+                    <PrimaryButton
+                      type="submit"
+                      disabled={isLoading}
+                      className="w-[509px] h-[54px] "
+                    >
+                      {isLoading ? "Loading..." : "NEXT"}
+                    </PrimaryButton>
+                    {/* Already have an account */}
+                    <p className=" text-black text-center mt-[350px] ">
+                      Already have an account?{" "}
+                      <Link
+                        href="/login"
+                        className="text-primary-sage underline"
+                      >
+                        Log in
+                      </Link>
+                      .
+                    </p>
+                  </div>
+                </form>
               </div>
             </div>
-            
-            <div className="mt-4">
-              <OAuthButtons 
-                role={selectedRole as 'CLIENT' | 'FREELANCER'}
-                onSuccess={() => router.push('/dashboard')}
-                onError={(error) => clearError()}
-              />
+          </div>
+
+          {/* Right side (Image) */}
+          <div className="relative w-[791px] h-[976px] mt-6 rounded-4xl overflow-hidden">
+            <div
+              className="absolute  inset-0 bg-cover bg-center"
+              style={{ backgroundImage: "url('./frame2.jpg')" }}
+            ></div>
+            <div className="absolute inset-0  bg-black opacity-30"></div>
+            <div className="absolute inset-0 w-[791px] h-[976px] flex items-center justify-center">
+              <h2 className="absolute top-8 left-10 text-white text-[64px] font-bold">
+                Connecting Top <br /> Talent with Ambit
+              </h2>
             </div>
           </div>
-          
-          <div className="mt-4 text-center">
-            <a 
-              href="/forgot-password" 
-              className="text-sm text-muted-foreground hover:text-primary underline"
-            >
-              Forgot your password?
-            </a>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
+        </div>
+      </div>
+    </>
   );
-};
-
-export default LoginPage;
+}

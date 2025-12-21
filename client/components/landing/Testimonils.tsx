@@ -35,55 +35,70 @@ const testimonials = [
 
 const Testimonials = () => {
   return (
-    <section className="section-container bg-white py-20 ">
+    <section className="section-container bg-white  ">
       {/* Title */}
-      <div className="text-center mb-14">
-        <h2 className="text-3xl md:text-4xl font-bold text-[#2E4A3D]">
-          WHAT OUR USERS SAY ABOUT RIZLAX
-        </h2>
-        <p className="text-gray-500 mt-3 max-w-2xl mx-auto">
-          Find Professionals Across Every Industry — From Creative Design To
-          Technical Development.
-        </p>
-      </div>
+      <div className="pt-32 pb-36">
+        <div className="flex flex-col gap-4 text-center mb-14">
+          <h2 className="text-5xl font-bold bg-gradient-to-r from-[#23343D] via-[#598671] to-[#23343D] bg-clip-text text-transparent">
+            WHAT OUR USERS SAY ABOUT RIZLAX
+          </h2>
+          <p className="text-gray-500 mt-3 max-w-2xl mx-auto">
+            Find Professionals Across Every Industry — From Creative Design To
+            Technical Development.
+          </p>
+        </div>
 
-      {/* Grid */}
-      <div className="flex flex-wrap justify-between gap-6  mx-auto">
-        {testimonials.map((item, index) => (
-          <div key={index} className="bg-[#F2F9E6] w-[405px] h-[390px] rounded-3xl p-8 relative">
-            <div className="flex items-center gap-6  mb-8">
-              {/* Quote */}
-              <Image src="/quoteIcon.svg" alt="Quote" width={64} height={64} />
-              {/* Name */}
-              <h3 className="font-bold text-2xl text-primary-teal mb-2">
-                {item.name}
-              </h3>
-            </div>
+        {/* Grid */}
+        <div className="flex flex-wrap justify-between gap-6  mx-auto">
+          {testimonials.map((item, index) => (
+            <div
+              key={index}
+              className="bg-[#F2F9E6] border-[3px] border-primary-teal/20 w-[405px] h-[390px] rounded-3xl p-8 relative"
+            >
+              <div className="flex items-center gap-6  mb-8">
+                {/* Quote */}
+                <Image
+                  src="/quoteIcon.svg"
+                  alt="Quote"
+                  width={64}
+                  height={64}
+                />
+                {/* Name */}
+                <h3 className="font-bold text-2xl text-primary-teal mb-2">
+                  {item.name}
+                </h3>
+              </div>
 
-            {/* Text */}
-            <p className="text-gray-600 text-sm mb-6 leading-relaxed">
-              {item.text}
-            </p>
-
-            <hr className="border-[#CDE5B2] mb-4" />
-
-            {/* Role */}
-            <div className="flex flex-col gap-6">
-              <p className="text-md text-[#2E4A3D] font-medium">
-                {item.role}
+              {/* Text */}
+              <p className="text-gray-600 text-sm mb-6 leading-relaxed">
+                {item.text}
               </p>
 
-              {/* Stars */}
-              <div className="flex gap-1 text-yellow-400">
-                {[...Array(5)].map((_, i) => (
-                  <span key={i}>
-                    <Image src="/starIcon.svg" alt="Star" width={32} height={32} />
-                  </span>
-                ))}
+              <hr className="border-[#CDE5B2] mb-4" />
+
+              {/* Role */}
+              <div className="flex flex-col gap-6">
+                <p className="text-md text-[#2E4A3D] font-medium">
+                  {item.role}
+                </p>
+
+                {/* Stars */}
+                <div className="flex gap-1 text-yellow-400">
+                  {[...Array(5)].map((_, i) => (
+                    <span key={i}>
+                      <Image
+                        src="/starIcon.svg"
+                        alt="Star"
+                        width={32}
+                        height={32}
+                      />
+                    </span>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </section>
   );

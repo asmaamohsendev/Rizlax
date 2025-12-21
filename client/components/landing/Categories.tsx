@@ -22,7 +22,8 @@ const categoriesData = [
 
 const Categories: React.FC = () => {
   return (
-    <section className="section-container w-full py-20 text-center">
+    <section className="section-container  text-center">
+      <div className="pt-32 pb-36">
       <div className="flex flex-col gap-4">
         <h2 className="text-5xl l font-extrabold bg-gradient-to-r from-[#23343D] via-[#598671] to-[#23343D] bg-clip-text text-transparent">
           EXPLORE POPULAR CATEGORIES
@@ -66,6 +67,7 @@ const Categories: React.FC = () => {
       <button className="mt-12 text-2xl font-semibold text-gray-800 hover:text-green-600 transition">
         SEE ALL
       </button>
+      </div>
     </section>
   );
 };
