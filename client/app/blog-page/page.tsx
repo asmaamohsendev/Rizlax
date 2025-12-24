@@ -1,10 +1,11 @@
 import React from 'react'
 import Image from "next/image";
 import Howbuild from '@/components/Blog-page/Howbuild';
+import Latestnews from '@/components/Blog-page/Latestnews';
 const page = () => {
     return (
         <div className='section-container'>
-            <div className=' flex flex-col my-12 gap-6 '>
+            <div className=' flex flex-col my-14 gap-7 '>
                 <div className='flex flex-col gap w-[932px] h-[110px]'>
 
                     <h1 className=' text-[48px] font-semibold bg-gradient-to-r from-[#23343D] via-[#598671] to-[#23343D] bg-clip-text text-transparent '>From the Rizlax Blog</h1>
@@ -25,6 +26,12 @@ const page = () => {
             </div>
             <div className='h-[429px] '>
                 <Howbuild />
+            </div>
+            <div className='h-[750px] w-[1281px]'>
+                <Latestnews/>
+            </div>
+            <div>
+                <Latestnews/>
             </div>
         </div>
     )
