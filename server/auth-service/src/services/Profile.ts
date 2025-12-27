@@ -17,7 +17,6 @@ class ProfileService {
             await tx.client.create({
                 data: {
                     userId: user.id,
-                    fullName: user.name,
                 },
             });
             logger.info(`Created Client profile for: ${user.email}`);
@@ -25,8 +24,7 @@ class ProfileService {
             await tx.freelancer.create({
                 data: {
                     userId: user.id,
-                    fullName: user.name,
-                    experienceLevel: "JUNIOR",
+                    experienceLevel: "BEGINNER",
                 },
             });
             logger.info(`Created Freelancer profile for: ${user.email}`);

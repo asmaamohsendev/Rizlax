@@ -7,7 +7,7 @@ const BlogCards: React.FC = () => {
   const cards = [1, 2, 3, 4];
 
   return (
-    <section className="section-container  py-20 text-center">
+    <section className="section-container h-dvh text-center">
       <div className=" flex flex-col gap-4  h-32 ">
         <h1 className="font-bold text-5xl bg-gradient-to-r from-[#23343D] via-[#598671] to-[#23343D]
 bg-clip-text text-transparent

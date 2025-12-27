@@ -1,12 +1,18 @@
 "use client";
 
-import { useAuth, useIsLoggedIn } from "@/stores/useAuth";
-import { useRouter } from "next/navigation";
+import {
+  useAuth,
+  useIsLoggedIn,
+  useIsProfileCompleted,
+} from "@/stores/useAuth";
+import { useRouter, usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 const Guard = ({ children }: { children: React.ReactNode }) => {
   const isLoggedIn = useIsLoggedIn();
+  const isProfileCompleted = useIsProfileCompleted();
   const _hasHydrated = useAuth((state) => state._hasHydrated);
+  const pathname = usePathname();
   const router = useRouter();
   const [isClient, setIsClient] = useState(false);
 
@@ -15,11 +21,21 @@ const Guard = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   useEffect(() => {
-    // Only redirect after both client-side and store have hydrated
     if (isClient && _hasHydrated && !isLoggedIn) {
       router.push("/login");
+    } else if (isClient && _hasHydrated && isLoggedIn && !isProfileCompleted) {
+      router.replace("/onboarding");
+    } else if (
+      isClient &&
+      _hasHydrated &&
+      isLoggedIn &&
+      isProfileCompleted &&
+      (pathname === "/login" || pathname === "/onboarding")
+    ) {
+      router.push("/dashboard");
     }
-  }, [isClient, _hasHydrated, isLoggedIn, router]);
+
+  }, [isClient, _hasHydrated, isLoggedIn, isProfileCompleted, pathname, router]);
 
   // Show loading while hydrating
   if (!isClient || !_hasHydrated) {
@@ -30,7 +46,7 @@ const Guard = ({ children }: { children: React.ReactNode }) => {
     );
   }
 
-  if (!isLoggedIn) return null;
+if (!isLoggedIn && pathname !== "/login") return null;
 
   return <>{children}</>;
 };

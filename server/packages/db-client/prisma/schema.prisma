@@ -9,15 +9,18 @@ datasource db {
 }
 
 model User {
-  id                               String                    @id @default(uuid())
-  email                            String                    @unique
-  password                         String?
-  name                             String
-  phoneNumber                      String?                   @unique
-  country                          CountryCode               @default(EG)
-  role                             Role
-  status                           UserStatus                @default(ACTIVE)
-  isVerified                       Boolean                   @default(false)
+  id                  String      @id @default(uuid())
+  email               String      @unique
+  password            String?
+  name                String
+  phoneNumber         String?     @unique
+  country             CountryCode @default(EG)
+  role                Role
+  status              UserStatus  @default(ACTIVE)
+  isVerified          Boolean     @default(false)
+  onBoardingCompleted Boolean     @default(false)
+  onBoardingStep      Int         @default(1)
+
   createdAt                        DateTime                  @default(now())
   updatedAt                        DateTime                  @updatedAt
   suspendedUntil                   DateTime?
@@ -189,18 +192,18 @@ model Otp {
 }
 
 model Client {
-  id          String     @id @default(uuid())
-  userId      String     @unique
-  fullName    String
-  companyName String?
-  bio         String?
-  website     String?
-  location    String?
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  user        User       @relation(fields: [userId], references: [id])
-  contracts   Contract[]
-  jobs        Job[]
+  id              String     @id @default(uuid())
+  userId          String     @unique
+  professionTitle String?
+  companyName     String?
+  bio             String?
+  website         String?
+  location        String?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+  user            User       @relation(fields: [userId], references: [id])
+  contracts       Contract[]
+  jobs            Job[]
 }
 
 model Job {
@@ -292,29 +295,69 @@ enum MilestoneStatus {
 }
 
 model Freelancer {
-  id              String          @id @default(uuid())
-  userId          String          @unique
-  fullName        String
+  id              String                @id @default(uuid())
+  userId          String                @unique
+  professionTitle String?
   hourlyRate      Float?
   experienceLevel ExperienceLevel
   bio             String?
-  profilePicture  String?
-  isAvailable     Boolean         @default(true)
-  createdAt       DateTime        @default(now())
-  updatedAt       DateTime        @updatedAt
+  languages       FreelancerLanguages[]
+  location        String?
+  isAvailable     Boolean               @default(true)
+  availability    Availability?
+  createdAt       DateTime              @default(now())
+  updatedAt       DateTime              @updatedAt
   contracts       Contract[]
-  user            User            @relation(fields: [userId], references: [id])
+  user            User                  @relation(fields: [userId], references: [id])
   portfolioLinks  PortfolioLink[]
   proposals       Proposal[]
   reviews         Review[]
-  skills          Skill[]         @relation("FreelancerSkills")
   withdrawals     Withdrawal[]
+  mainCategories  MainCategory[]        @relation("FreelancerSkills")
+  subCategories   SubCategory[]         @relation("FreelancerSubSkills")
 }
 
-model Skill {
+enum Availability {
+  FULL_TIME
+  PART_TIME
+  AS_NEEDED
+}
+
+model FreelancerLanguages {
+  freelancerId        String
+  languageId          String
+  languageProficiency LanguageProficiency
+
+  freelancer Freelancer @relation(fields: [freelancerId], references: [id], onDelete: Cascade)
+  language   Language   @relation(fields: [languageId], references: [id], onDelete: Cascade)
+
+  @@id([freelancerId, languageId])
+  @@map("freelancer_languages")
+}
+
+model Language {
+  id                  String                @id @default(uuid())
+  name                String
+  freelancerLanguages FreelancerLanguages[]
+}
+
+enum LanguageProficiency {
+  BASIC
+  CONVERSATIONAL
+  FLUENT
+  NATIVE
+}
+
+model MainCategory {
   id          String       @id @default(uuid())
   name        String
   freelancers Freelancer[] @relation("FreelancerSkills")
+}
+
+model SubCategory {
+  id          String       @id @default(uuid())
+  name        String
+  freelancers Freelancer[] @relation("FreelancerSubSkills")
 }
 
 model PortfolioLink {
@@ -529,9 +572,9 @@ enum ContractStatus {
 }
 
 enum ExperienceLevel {
-  JUNIOR
-  MID
-  SENIOR
+  BEGINNER
+  INTERMEDIATE
+  EXPERT
 }
 
 enum AuthProvider {

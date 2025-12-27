@@ -171,14 +171,14 @@ export default function RegisterPage() {
                     >
                       {isLoading ? "Loading..." : "NEXT"}
                     </PrimaryButton>
-                    {/* Already have an account */}
+                    {/* dont have an account */}
                     <p className=" text-black text-center mt-[350px] ">
-                      Already have an account?{" "}
+                      Don&apos;t have an account?{" "}
                       <Link
-                        href="/login"
+                        href="/register"
                         className="text-primary-sage underline"
                       >
-                        Log in
+                        SIGN UP
                       </Link>
                       .
                     </p>
