@@ -1,25 +1,55 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-export type UserRole = "client" | "freelancer" | "admin";
+export type UserRole = "CLIENT" | "FREELANCER" | "ADMIN";
+export type UserStatus = "ACTIVE" | "SUSPENDED" | "BANNED";
+export type AuthProvider = "EMAIL" | "GOOGLE";
+export type CountryCode =
+  | "EG"
+  | "SA"
+  | "AE"
+  | "KW"
+  | "QA"
+  | "BH"
+  | "OM"
+  | "JO"
+  | "LB"
+  | "IQ"
+  | "SY"
+  | "PS"
+  | "YE"
+  | "MA"
+  | "DZ"
+  | "TN"
+  | "LY"
+  | "SD"
+  | "MR"
+  | "SO"
+  | "DJ"
+  | "PK"
+  | "ID"
+  | "TR"
+  | "IR";
 
 export type User = {
   id: string;
-  name: string;
-  phoneNumber: string;
-  country: string;
   email: string;
-  avatar?: string;
-  role?: UserRole;
-  createdAt?: string;
-  updatedAt?: string;
-  bio?: string;
-  company?: string;
-  website?: string;
-  industry?: string;
-  companySize?: string;
-  location?: string;
-  phone?: string;
+  password?: string;
+  name: string;
+  phoneNumber?: string;
+  country: CountryCode;
+  role: UserRole;
+  status: UserStatus;
+  isVerified: boolean;
+  onBoardingCompleted: boolean;
+  onBoardingStep: number;
+  createdAt: string;
+  updatedAt: string;
+  suspendedUntil?: string;
+  // OAuth fields
+  googleId?: string;
+  profilePicture?: string;
+  authProvider: AuthProvider;
 };
 
 type AuthState = {
@@ -46,10 +76,8 @@ export const useAuth = create<AuthState>()(
       isLoading: false,
       error: null,
       _hasHydrated: false,
-      login: (user, token) =>
-        set({ user, token, error: null }),
-      register: (user, token) =>
-        set({ user, token, error: null }),
+      login: (user, token) => set({ user, token, error: null }),
+      register: (user, token) => set({ user, token, error: null }),
       logout: () => set({ user: null, token: null, error: null }),
       setLoading: (loading) => set({ isLoading: loading }),
       setError: (error) => set({ error }),
@@ -73,4 +101,16 @@ export const useIsLoggedIn = () => {
   const user = useAuth((state) => state.user);
   const token = useAuth((state) => state.token);
   return !!user && !!token;
+};
+
+// Export a hook to check if profile is completed
+export const useIsProfileCompleted = () => {
+  const user = useAuth((state) => state.user);
+  return user?.onBoardingCompleted ?? false;
+};
+
+// Export a hook to get OnBoarding Step
+export const useOnBoardingStep = () => {
+  const user = useAuth((state) => state.user);
+  return user?.onBoardingStep ?? 0;
 };
